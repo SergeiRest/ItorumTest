@@ -11,7 +11,7 @@ public class RotationState : KeyState, ITaskInitializer
     
     public override void Move(Vector3 position)
     {
-        if ((_gameObject.transform.position - position).sqrMagnitude > 3)
+        if ((_gameObject.transform.position - position).sqrMagnitude > 1)
         {
             _gameObject.transform.Rotate(new Vector3(0,0, 90));
             ChangeState();

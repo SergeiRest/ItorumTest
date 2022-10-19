@@ -11,10 +11,12 @@ public class TaskSingleton : Singleton<TaskSingleton>
 
     private Task _curreentTask;
     private int _index = 0;
+    private int _wrongsCount = 0;
 
     public TaskContainer Container => _container;
 
     public Action<string> OnTaskComplete;
+    public Action<string> OnTaskWronged;
     
     private void Start()
     {
@@ -29,7 +31,6 @@ public class TaskSingleton : Singleton<TaskSingleton>
     {
         if (_curreentTask == task)
         {
-            Debug.Log("Всё гуд");
             callback?.Invoke();
             _index++;
             if (_index < _container.Tasks.Length)
@@ -44,7 +45,8 @@ public class TaskSingleton : Singleton<TaskSingleton>
         }
         else
         {
-            Debug.Log("Не очень гуд");
+            _wrongsCount++;
+            OnTaskWronged?.Invoke("Не гуд");
         }
     }
 

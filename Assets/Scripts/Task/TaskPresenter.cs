@@ -11,5 +11,12 @@ public class TaskPresenter : MonoBehaviour
     private void Awake()
     {
         _taskModel.OnTaskComplete += _taskView.ChangeDescription;
+        _taskModel.OnTaskWronged += _taskView.ChangeWrongMessage;
+    }
+
+    private void OnDestroy()
+    {
+        _taskModel.OnTaskComplete -= _taskView.ChangeDescription;
+        _taskModel.OnTaskWronged -= _taskView.ChangeWrongMessage;
     }
 }
