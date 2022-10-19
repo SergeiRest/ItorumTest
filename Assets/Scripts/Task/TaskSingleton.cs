@@ -8,7 +8,8 @@ using UnityEngine;
 public class TaskSingleton : Singleton<TaskSingleton>
 {
     [SerializeField] private TaskContainer _container;
-
+    [SerializeField] private int _wrongsToLose = 3;
+    
     private Task _curreentTask;
     private int _index = 0;
     private int _wrongsCount = 0;
@@ -17,6 +18,8 @@ public class TaskSingleton : Singleton<TaskSingleton>
 
     public Action<string> OnTaskComplete;
     public Action<string> OnTaskWronged;
+    public Action OnLose;
+    public Action OnWin;
     
     private void Start()
     {
@@ -27,9 +30,17 @@ public class TaskSingleton : Singleton<TaskSingleton>
         }
     }
 
+    private void OnDestroy()
+    {
+        foreach (Task task in _container.Tasks)
+        {
+            task.OnTaskComplete -= TryComplete;
+        }
+    }
+
     private void TryComplete(Task task, bool isCorrect, Action callback)
     {
-        if (_curreentTask == task)
+        if (_curreentTask == task && isCorrect == true)
         {
             callback?.Invoke();
             _index++;
@@ -40,6 +51,7 @@ public class TaskSingleton : Singleton<TaskSingleton>
             }
             else
             {
+                OnWin?.Invoke();
                 OnTaskComplete?.Invoke("Конец приложения");
             }
         }
@@ -47,6 +59,10 @@ public class TaskSingleton : Singleton<TaskSingleton>
         {
             _wrongsCount++;
             OnTaskWronged?.Invoke("Не гуд");
+            if (_wrongsCount >= _wrongsToLose)
+            {
+                OnLose?.Invoke();
+            }
         }
     }
 

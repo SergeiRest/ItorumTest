@@ -13,7 +13,7 @@ public class MovingState : KeyState
     public override void Move(Vector3 position)
     {
         _gameObject.transform.position = position;
-        if ((_gameObject.transform.position - _target.position).sqrMagnitude < 1)
+        if ((_gameObject.transform.position - _target.position).sqrMagnitude < 0.3f)
         {
             ChangeState();
         }
