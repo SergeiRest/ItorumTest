@@ -1,10 +1,12 @@
 using UnityEngine;
 
-public class RotationState : KeyState
+public class RotationState : KeyState, ITaskInitializer
 {
+    private Task _task;
     public RotationState(GameObject gameObject)
     {
         _gameObject = gameObject;
+        Initialize();
     }
     
     public override void Move(Vector3 position)
@@ -18,6 +20,12 @@ public class RotationState : KeyState
 
     public override void ChangeState()
     {
+        _task.OnTaskComplete?.Invoke(_task, true, null);
         OnStateChanged?.Invoke(new ActivatedState(_gameObject));
+    }
+
+    public void Initialize()
+    {
+        _task = TaskSingleton.Instance.Container.Tasks[0];
     }
 }
