@@ -1,18 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TaskPresenter : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private TaskSingleton _taskModel;
+    [SerializeField] private TaskView _taskView;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        _taskModel.OnTaskComplete += _taskView.ChangeDescription;
     }
 }

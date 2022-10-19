@@ -14,9 +14,11 @@ public class TaskSingleton : Singleton<TaskSingleton>
 
     public TaskContainer Container => _container;
 
+    public Action<string> OnTaskComplete;
+    
     private void Start()
     {
-        _curreentTask = _container.Tasks[_index];
+        GetTask();
         foreach (Task task in _container.Tasks)
         {
             task.OnTaskComplete += TryComplete;
@@ -32,12 +34,23 @@ public class TaskSingleton : Singleton<TaskSingleton>
             _index++;
             if (_index < _container.Tasks.Length)
             {
-                _curreentTask = _container.Tasks[_index];
+               GetTask();
+                return;
+            }
+            else
+            {
+                OnTaskComplete?.Invoke("Конец приложения");
             }
         }
         else
         {
             Debug.Log("Не очень гуд");
         }
+    }
+
+    private void GetTask()
+    {
+        _curreentTask = _container.Tasks[_index];
+        OnTaskComplete?.Invoke(_curreentTask.Description);
     }
 }
